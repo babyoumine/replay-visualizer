@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>owo</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+</head>
+<body>
+    <style>
+        body {
+            height: 100%;
+            margin: 0;
+        }
+        main {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .replay-container {
+            border-color: black;
+            border-style: solid;
+            width: 512px;
+            height: 384px;
+        }
+        .cursor-container {
+            margin-top: -32px;
+            margin-left: -32px;
+            width: 64px;
+            height: 64px;
+        }
+        .cursor {
+            width: 100%;
+            height: auto;
+        }
+    </style>
+    <main>
+        <div class="replay-container">
+            <div class="cursor-container">
+                <img src="cursor.png" class="cursor">
+            </div>
+        </div>
+    </main>
+
+    <script>
+        var x = 0;
+        var y = 0;
+
+        var cursor = document.getElementsByClassName("cursor-container");
+        $(document).ready(function () {
+            $.getJSON("./boobies.json", frames => {
+                var totalTime = 0;
+
+                for(var i = 0; i < frames.length; i++) {
+                    totalTime += frames[i].timeSinceLastAction;
+                }
+
+                function updateFrame(i){
+                    x = frames[i].x;
+                    y = frames[i].y;
+                }
+
+                function moveCursor() {
+                    updateFrame(i);
+                    cursor[0].style.transform = `translate(${x}px, ${y}px)`;
+                }
+
+                var i = 0;
+
+                setInterval(function(){
+                    if(i >= frames.length) i = 0;
+                    moveCursor(i);
+                    i++;
+                }, 0.125);
+            });
+        });
+        
+    </script>
+</body>
+</html>
